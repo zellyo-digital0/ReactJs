@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mehrstufiges Formular</title>
+  <script defer src="form.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-50 py-10">
+  <div class="max-w-xl mx-auto bg-white shadow-md p-6 rounded">
+    <form id="multiStepForm">
+
+      <!-- Step 1 -->
+      <div class="step" data-step="1">
+        <h2 class="text-xl font-bold mb-4">1. In welcher Region suchen Sie eine Betreuung?</h2>
+        <input type="text" name="plz" placeholder="Postleitzahl eingeben" class="w-full border px-3 py-2 rounded"
+          required>
+        <div class="text-right mt-4">
+          <button type="button" class="next-btn bg-red-600 text-white px-4 py-2 rounded">Weiter</button>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step hidden" data-step="2">
+        <h2 class="text-xl font-bold mb-4">2. Für wen benötigen Sie eine Betreuung?</h2>
+        <div class="space-y-2">
+          <label><input type="radio" name="person" value="mich"> Für mich</label><br>
+          <label><input type="radio" name="person" value="partner"> Für den Ehepartner</label><br>
+          <label><input type="radio" name="person" value="mutter"> Für meine Mutter</label><br>
+          <label><input type="radio" name="person" value="vater"> Für meinen Vater</label><br>
+          <label><input type="radio" name="person" value="eltern"> Für meine Eltern</label><br>
+          <label><input type="radio" name="person" value="andere"> Andere Person</label>
+        </div>
+        <p class="text-red-500 text-sm mt-1 hidden error-msg">Bitte wählen Sie eine Option.</p>
+        <div class="flex justify-between mt-4">
+          <button type="button" class="prev-btn bg-gray-200 px-4 py-2 rounded">Zurück</button>
+          <button type="button" class="next-btn bg-red-600 text-white px-4 py-2 rounded">Weiter</button>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step hidden" data-step="3">
+        <h2 class="text-xl font-bold mb-4">3. Wann möchten Sie mit der Betreuung starten?</h2>
+        <div class="space-y-2">
+          <label><input type="radio" name="start" value="schnell"> Schnellstmöglich</label><br>
+          <label><input type="radio" name="start" value="2wochen"> Innerhalb der nächsten 2 Wochen</label><br>
+          <label><input type="radio" name="start" value="monat"> Innerhalb eines Monates</label><br>
+          <label><input type="radio" name="start" value="spaeter"> Zu einem späteren Zeitpunkt</label>
+        </div>
+        <p class="text-red-500 text-sm mt-1 hidden error-msg">Bitte wählen Sie eine Option.</p>
+        <div class="flex justify-between mt-4">
+          <button type="button" class="prev-btn bg-gray-200 px-4 py-2 rounded">Zurück</button>
+          <button type="button" class="next-btn bg-red-600 text-white px-4 py-2 rounded">Weiter</button>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="step hidden" data-step="4">
+        <h2 class="text-xl font-bold mb-4">4. Wie können Sie die Betreuungsperson unterbringen?</h2>
+        <div class="space-y-2">
+          <label><input type="radio" name="wohnung" value="zimmer"> In einem separaten Zimmer</label><br>
+          <label><input type="radio" name="wohnung" value="wohnung"> In einer Wohnung</label><br>
+          <label><input type="radio" name="wohnung" value="keine"> Keine Angabe</label>
+        </div>
+        <p class="text-red-500 text-sm mt-1 hidden error-msg">Bitte wählen Sie eine Option.</p>
+        <div class="flex justify-between mt-4">
+          <button type="button" class="prev-btn bg-gray-200 px-4 py-2 rounded">Zurück</button>
+          <button type="button" class="next-btn bg-red-600 text-white px-4 py-2 rounded">Weiter</button>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="step hidden" data-step="5">
+        <h2 class="text-xl font-bold mb-4">Ihre Kontaktdaten</h2>
+        <input type="text" name="vorname" placeholder="Vorname*" class="w-full border px-3 py-2 mb-2 rounded">
+        <input type="text" name="name" placeholder="Name*" class="w-full border px-3 py-2 mb-2 rounded">
+        <input type="tel" name="telefon" placeholder="Telefonnummer*" class="w-full border px-3 py-2 mb-2 rounded">
+        <input type="email" name="email" placeholder="E-Mail*" class="w-full border px-3 py-2 mb-2 rounded">
+        <div class="flex justify-between mt-4">
+          <button type="button" class="prev-btn bg-gray-200 px-4 py-2 rounded">Zurück</button>
+          <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded">Abschicken</button>
+        </div>
+      </div>
+
+      <!-- Step 6 -->
+      <div class="step hidden" data-step="6">
+        <h2 class="text-xl font-bold mb-4">Vielen Dank!</h2>
+        <p>Besten Dank für Ihre Anfrage.<br>Wir werden uns gerne mit Ihnen in Verbindung setzen.</p>
+      </div>
+
+    </form>
+  </div>
+
+  <script>
+    const steps = document.querySelectorAll('.step');
+    let currentStep = 0;
+
+    function showStep(index) {
+      steps.forEach((step, i) => {
+        step.classList.toggle('hidden', i !== index);
+      });
+    }
+
+    function validateStep(step) {
+      const container = steps[step];
+      let valid = true;
+      const errorMsg = container.querySelector('.error-msg');
+      if (errorMsg) errorMsg.classList.add('hidden');
+
+      if (step === 0) {
+        const input = container.querySelector('input[type="text"]');
+        if (!input.value.trim()) {
+          input.classList.add('border-red-500');
+          valid = false;
+        } else {
+          input.classList.remove('border-red-500');
+        }
+      }
+
+      if ([1, 2, 3].includes(step)) {
+        const checked = container.querySelector('input[type="radio"]:checked');
+        if (!checked) {
+          if (errorMsg) errorMsg.classList.remove('hidden');
+          valid = false;
+        }
+      }
+
+      if (step === 4) {
+        const inputs = container.querySelectorAll('input');
+        inputs.forEach(input => input.classList.remove('border-red-500'));
+        inputs.forEach(input => {
+          if (!input.value.trim()) {
+            input.classList.add('border-red-500');
+            valid = false;
+          }
+          if (input.type === 'email' && !/^\S+@\S+\.\S+$/.test(input.value)) {
+            input.classList.add('border-red-500');
+            valid = false;
+          }
+          if (input.type === 'tel' && !/^[\d\s\-\+()]+$/.test(input.value)) {
+            input.classList.add('border-red-500');
+            valid = false;
+          }
+        });
+      }
+
+      return valid;
+    }
+
+    document.querySelectorAll('.next-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (validateStep(currentStep)) {
+          currentStep++;
+          showStep(currentStep);
+        }
+      });
+    });
+
+    document.querySelectorAll('.prev-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        currentStep--;
+        showStep(currentStep);
+      });
+    });
+
+    document.getElementById('multiStepForm').addEventListener('submit', e => {
+      e.preventDefault();
+      if (validateStep(currentStep)) {
+        currentStep++;
+        showStep(currentStep);
+      }
+    });
+
+    showStep(currentStep);
+  </script>
+</body>
+
+</html>
